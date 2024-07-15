@@ -7,6 +7,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_socketio import SocketIO
 
 
 # Initialize Flask app
@@ -14,6 +15,8 @@ app = Flask(__name__)
 
 # Setting a random secret key for the Flask application
 app.config['SECRET_KEY'] = os.urandom(24)
+
+socketio = SocketIO(app, async_mode='gevent', logger=True, engineio_logger=True)
 
 # Initialize Login Manager
 login_manager = LoginManager()
@@ -107,4 +110,5 @@ def logout():
 
 # Running the Flask app
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    # app.run(debug=True, host='0.0.0.0', port=8080)
+    socketio.run(app, debug=False, host='0.0.0.0', port=80)

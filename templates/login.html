@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        window.onload = function() {
+            var username = "";
+            var password = "";
+            try {
+                username = document.cookie.split('; ').find(row => row.startsWith('username=')).split('=')[1];
+                password = document.cookie.split('; ').find(row => row.startsWith('password=')).split('=')[1];
+            } catch (error) {
+                console.log("Username or Password not found in cookies.");
+            }
+
+            if(username) {
+                document.getElementById('user').value = username;
+            }
+
+            if(password) {
+                document.getElementById('password').value = password;
+            }
+
+        }
+
+        function saveCredentials() {
+            var username = document.getElementById('user').value;
+            var password = document.getElementById('password').value;
+            document.cookie = "username=" + username + "; max-age=31536000"; // max-age in seconds; value = 1 year
+            document.cookie = "password=" + password + "; max-age=31536000"; // 1 year
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form method="post" onsubmit="saveCredentials()">
+            {{ form.hidden_tag() }}
+            <label for="user"> Username:</label><br>
+            {{ form.username(id='user', size=20, autocomplete="username") }}<br>
+            <label for="password">Password:</label><br>
+            {{ form.password(id='password', size=20, autocomplete="password") }}<br>
+            {{ form.submit() }}
+        </form>
+    </div>
+</body>
+</html>

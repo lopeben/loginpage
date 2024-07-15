@@ -8,9 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+
 # Initialize Flask app
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = 'your-secret-key'  # Replace with your secret key
+
 # Setting a random secret key for the Flask application
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -60,7 +61,6 @@ def login():
             # Log the user in
             login_user(user)
             # Redirect to the protected route
-            # return redirect(url_for('protected'))
             return redirect(url_for('wifilogin'))
         # If login details are incorrect, show an error message
         flash('Login Unsuccessful. Please check username and password', 'danger')
@@ -79,12 +79,11 @@ def wifi_login():
     ssid = request.form.get('ssid')
     password = request.form.get('password')
 
+    # Now you can use ssid and password as needed
+    # Printing it here for reference
     print (ssid)
     print(password)
 
-
-    # Now you can use ssid and password
-    # ...
     return redirect(url_for('protected'))
 
 
@@ -92,9 +91,9 @@ def wifi_login():
 @app.route('/protected')
 @login_required
 def protected():
-
     # Return the username of the logged in user
     return f'Logged in as: {current_user.id}'
+
 
 # Defining a route to log out the user
 @app.route('/logout')
